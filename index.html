@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+  <meta name="theme-color" content="#111827" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="TOEIC Trainer" />
+  <title>TOEIC Trainer iPhone</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg2: #111827;
+      --card: rgba(255,255,255,.96);
+      --card-dark: rgba(17,24,39,.86);
+      --text: #111827;
+      --muted: #6b7280;
+      --soft: #f3f4f6;
+      --line: #e5e7eb;
+      --primary: #2563eb;
+      --primary2: #1d4ed8;
+      --good: #16a34a;
+      --bad: #dc2626;
+      --warn: #f59e0b;
+      --radius: 26px;
+      --shadow: 0 24px 60px rgba(0,0,0,.28);
+      --safe-top: env(safe-area-inset-top);
+      --safe-bottom: env(safe-area-inset-bottom);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 15% 0%, rgba(37,99,235,.45), transparent 34%),
+        radial-gradient(circle at 100% 20%, rgba(22,163,74,.24), transparent 30%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      color: white;
+      overscroll-behavior: none;
+    }
+
+    body {
+      padding: calc(14px + var(--safe-top)) 14px calc(92px + var(--safe-bottom));
+    }
+
+    button, input, select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: 0;
+      touch-action: manipulation;
+    }
+
+    .app {
+      width: min(520px, 100%);
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .brand {
+      min-width: 0;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: -.6px;
+    }
+
+    .brand p {
+      margin: 5px 0 0;
+      color: rgba(255,255,255,.68);
+      font-size: 13px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 8px 11px;
+      background: rgba(255,255,255,.12);
+      color: rgba(255,255,255,.88);
+      font-weight: 800;
+      font-size: 12px;
+      white-space: nowrap;
+      backdrop-filter: blur(12px);
+    }
+
+    .score-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .mini-stat {
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 18px;
+      padding: 10px 8px;
+      text-align: center;
+      backdrop-filter: blur(14px);
+    }
+
+    .mini-stat span {
+      display: block;
+      font-size: 10px;
+      color: rgba(255,255,255,.6);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .mini-stat strong {
+      display: block;
+      margin-top: 3px;
+      font-size: 19px;
+      line-height: 1;
+    }
+
+    .card {
+      background: var(--card);
+      color: var(--text);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .settings {
+      padding: 12px;
+      display: grid;
+      gap: 9px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .segmented {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: var(--soft);
+      padding: 4px;
+      border-radius: 18px;
+      gap: 4px;
+    }
+
+    .segmented button {
+      min-height: 42px;
+      border-radius: 14px;
+      background: transparent;
+      color: #4b5563;
+      font-weight: 900;
+      font-size: 14px;
+    }
+
+    .segmented button.active {
+      background: white;
+      color: var(--primary);
+      box-shadow: 0 6px 16px rgba(0,0,0,.08);
+    }
+
+    .select-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    select {
+      width: 100%;
+      min-height: 44px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: white;
+      color: #111827;
+      padding: 0 12px;
+      font-size: 16px;
+      outline: none;
+    }
+
+
+    .audio-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .audio-btn {
+      min-height: 44px;
+      border-radius: 16px;
+      background: #eff6ff;
+      color: #1e40af;
+      font-weight: 950;
+      font-size: 14px;
+    }
+
+    .audio-btn.on {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .audio-note {
+      font-size: 11px;
+      color: #6b7280;
+      line-height: 1.25;
+      padding: 0 2px 2px;
+    }
+
+    .question {
+      padding: 20px 18px 14px;
+      text-align: center;
+    }
+
+    .meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+    }
+
+    .meta span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1e40af;
+      font-weight: 900;
+      font-size: 12px;
+    }
+
+    .prompt-label {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: 11px;
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .word {
+      font-size: clamp(34px, 12vw, 58px);
+      line-height: 1.02;
+      font-weight: 950;
+      letter-spacing: -1.4px;
+      overflow-wrap: anywhere;
+      min-height: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .choices {
+      display: grid;
+      gap: 10px;
+      padding: 10px 12px 14px;
+    }
+
+    .choice {
+      width: 100%;
+      min-height: 62px;
+      border-radius: 20px;
+      background: #f9fafb;
+      color: #111827;
+      border: 1px solid var(--line);
+      text-align: left;
+      padding: 15px 16px;
+      font-size: 17px;
+      line-height: 1.18;
+      font-weight: 850;
+    }
+
+    .choice:active {
+      transform: scale(.985);
+    }
+
+    .choice.correct {
+      background: #ecfdf5;
+      color: #166534;
+      border-color: #86efac;
+    }
+
+    .choice.wrong {
+      background: #fef2f2;
+      color: #991b1b;
+      border-color: #fecaca;
+    }
+
+    .write-zone {
+      padding: 10px 12px 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    input {
+      width: 100%;
+      min-height: 58px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      padding: 0 16px;
+      font-size: 18px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #93c5fd;
+      box-shadow: 0 0 0 4px rgba(37,99,235,.12);
+    }
+
+    .action-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 0 12px 14px;
+    }
+
+    .write-zone .action-row {
+      padding: 0;
+      grid-template-columns: 1.2fr .8fr;
+    }
+
+    .btn {
+      min-height: 54px;
+      border-radius: 18px;
+      font-size: 16px;
+      font-weight: 950;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:active {
+      background: var(--primary2);
+    }
+
+    .btn-soft {
+      background: #eef2ff;
+      color: #3730a3;
+    }
+
+    .btn-light {
+      background: #f3f4f6;
+      color: #374151;
+    }
+
+    .feedback {
+      margin: 0 12px 14px;
+      border-radius: 18px;
+      padding: 13px 14px;
+      font-size: 15px;
+      line-height: 1.3;
+      font-weight: 850;
+      display: none;
+    }
+
+    .feedback.show {
+      display: block;
+    }
+
+    .feedback.good {
+      background: #ecfdf5;
+      color: #166534;
+      border: 1px solid #86efac;
+    }
+
+    .feedback.bad {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .feedback.info {
+      background: #eff6ff;
+      color: #1e40af;
+      border: 1px solid #bfdbfe;
+    }
+
+    .review-card {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 24px;
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(14px);
+    }
+
+    .review-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .review-head h2 {
+      margin: 0;
+      font-size: 16px;
+      color: rgba(255,255,255,.95);
+    }
+
+    .small-btn {
+      border-radius: 999px;
+      min-height: 34px;
+      padding: 7px 11px;
+      background: rgba(255,255,255,.13);
+      color: white;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .review-list {
+      display: flex;
+      gap: 7px;
+      overflow-x: auto;
+      padding-bottom: 3px;
+      scrollbar-width: none;
+    }
+
+    .review-list::-webkit-scrollbar {
+      display: none;
+    }
+
+    .review-chip {
+      flex: 0 0 auto;
+      max-width: 280px;
+      border-radius: 999px;
+      padding: 9px 11px;
+      background: rgba(255,255,255,.92);
+      color: #92400e;
+      font-size: 12px;
+      font-weight: 850;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 10px 14px calc(10px + var(--safe-bottom));
+      background: rgba(11,16,32,.78);
+      backdrop-filter: blur(22px);
+      border-top: 1px solid rgba(255,255,255,.12);
+      z-index: 20;
+    }
+
+    .bottom-inner {
+      width: min(520px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
+
+    .nav-btn {
+      min-height: 48px;
+      border-radius: 17px;
+      background: rgba(255,255,255,.12);
+      color: white;
+      font-weight: 950;
+      font-size: 14px;
+    }
+
+    .nav-btn.main {
+      background: white;
+      color: #111827;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .toast {
+      position: fixed;
+      left: 14px;
+      right: 14px;
+      bottom: calc(82px + var(--safe-bottom));
+      max-width: 492px;
+      margin: auto;
+      padding: 12px 14px;
+      border-radius: 18px;
+      background: rgba(17,24,39,.92);
+      color: white;
+      font-weight: 850;
+      box-shadow: 0 16px 40px rgba(0,0,0,.3);
+      display: none;
+      z-index: 30;
+    }
+
+    .toast.show {
+      display: block;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .card {
+        background: rgba(255,255,255,.96);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="topbar">
+      <div class="brand">
+        <h1>TOEIC Trainer</h1>
+        <p>Version iPhone • vocabulaire essentiel</p>
+      </div>
+      <div class="chip"><span id="wordCount"></span> mots</div>
+    </div>
+
+    <div class="score-row">
+      <div class="mini-stat"><span>Justes</span><strong id="good">0</strong></div>
+      <div class="mini-stat"><span>Ratés</span><strong id="bad">0</strong></div>
+      <div class="mini-stat"><span>Série</span><strong id="streak">0</strong></div>
+      <div class="mini-stat"><span>Taux</span><strong id="rate">0%</strong></div>
+    </div>
+
+    <section class="card">
+      <div class="settings">
+        <div class="segmented">
+          <button id="modeQcm" class="active">QCM</button>
+          <button id="modeWrite">Écrit</button>
+        </div>
+        <div class="select-row">
+          <select id="direction" aria-label="Sens de traduction">
+            <option value="random">Sens aléatoire</option>
+            <option value="en-fr">EN → FR</option>
+            <option value="fr-en">FR → EN</option>
+          </select>
+          <select id="focus" aria-label="Révision">
+            <option value="all">Tous les mots</option>
+            <option value="mistakes">Mes erreurs</option>
+          </select>
+        </div>
+        <div class="audio-row">
+          <button id="speakBtn" class="audio-btn">🔊 Écouter EN</button>
+          <button id="autoAudioBtn" class="audio-btn">Auto audio : OFF</button>
+        </div>
+        <div class="audio-note">L’audio lit toujours le mot ou l’expression en anglais, même si la question est en français.</div>
+        <select id="category" aria-label="Catégorie">
+          <option value="all">Toutes les catégories</option>
+        </select>
+      </div>
+
+      <div class="question">
+        <div class="meta">
+          <span id="catPill">Catégorie</span>
+          <span id="dirPill">EN → FR</span>
+        </div>
+        <div class="prompt-label">Traduis</div>
+        <div class="word" id="questionWord">deadline</div>
+      </div>
+
+      <div id="qcmZone" class="choices"></div>
+
+      <div id="writeZone" class="write-zone hidden">
+        <input id="answerInput" type="text" placeholder="Ta réponse..." autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" />
+        <div class="action-row">
+          <button class="btn btn-primary" id="checkBtn">Valider</button>
+          <button class="btn btn-soft" id="skipWriteBtn">Réponse</button>
+        </div>
+      </div>
+
+      <div id="qcmActions" class="action-row">
+        <button class="btn btn-soft" id="skipQcmBtn">Je passe</button>
+        <button class="btn btn-light" id="nextQcmBtn">Suivant</button>
+      </div>
+
+      <div id="feedback" class="feedback"></div>
+    </section>
+
+    <section class="review-card">
+      <div class="review-head">
+        <h2>Mots à revoir</h2>
+        <button id="clearMistakesBtn" class="small-btn">Vider</button>
+      </div>
+      <div id="reviewList" class="review-list"></div>
+    </section>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="bottom-inner">
+      <button id="bottomAnswer" class="nav-btn">Réponse</button>
+      <button id="bottomNext" class="nav-btn main">Suivant</button>
+      <button id="resetBtn" class="nav-btn">Reset</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    const VOCAB = [{"en": "company", "fr": "entreprise", "cat": "Entreprise / travail"}, {"en": "firm", "fr": "société", "cat": "Entreprise / travail"}, {"en": "business", "fr": "entreprise / affaires", "cat": "Entreprise / travail"}, {"en": "office", "fr": "bureau", "cat": "Entreprise / travail"}, {"en": "headquarters", "fr": "siège social", "cat": "Entreprise / travail"}, {"en": "branch", "fr": "agence / filiale", "cat": "Entreprise / travail"}, {"en": "department", "fr": "service", "cat": "Entreprise / travail"}, {"en": "staff", "fr": "personnel", "cat": "Entreprise / travail"}, {"en": "employee", "fr": "employé", "cat": "Entreprise / travail"}, {"en": "employer", "fr": "employeur", "cat": "Entreprise / travail"}, {"en": "manager", "fr": "responsable", "cat": "Entreprise / travail"}, {"en": "supervisor", "fr": "superviseur", "cat": "Entreprise / travail"}, {"en": "executive", "fr": "cadre / dirigeant", "cat": "Entreprise / travail"}, {"en": "colleague", "fr": "collègue", "cat": "Entreprise / travail"}, {"en": "coworker", "fr": "collègue", "cat": "Entreprise / travail"}, {"en": "client", "fr": "client", "cat": "Entreprise / travail"}, {"en": "customer", "fr": "client", "cat": "Entreprise / travail"}, {"en": "supplier", "fr": "fournisseur", "cat": "Entreprise / travail"}, {"en": "contractor", "fr": "entrepreneur / prestataire", "cat": "Entreprise / travail"}, {"en": "partner", "fr": "partenaire", "cat": "Entreprise / travail"}, {"en": "team", "fr": "équipe", "cat": "Entreprise / travail"}, {"en": "workplace", "fr": "lieu de travail", "cat": "Entreprise / travail"}, {"en": "position", "fr": "poste", "cat": "Entreprise / travail"}, {"en": "role", "fr": "rôle / poste", "cat": "Entreprise / travail"}, {"en": "task", "fr": "tâche", "cat": "Entreprise / travail"}, {"en": "duty", "fr": "devoir / mission", "cat": "Entreprise / travail"}, {"en": "responsibility", "fr": "responsabilité", "cat": "Entreprise / travail"}, {"en": "workload", "fr": "charge de travail", "cat": "Entreprise / travail"}, {"en": "project", "fr": "projet", "cat": "Entreprise / travail"}, {"en": "assignment", "fr": "mission / tâche confiée", "cat": "Entreprise / travail"}, {"en": "deadline", "fr": "date limite", "cat": "Entreprise / travail"}, {"en": "schedule", "fr": "planning", "cat": "Entreprise / travail"}, {"en": "timetable", "fr": "emploi du temps", "cat": "Entreprise / travail"}, {"en": "shift", "fr": "poste / créneau de travail", "cat": "Entreprise / travail"}, {"en": "overtime", "fr": "heures supplémentaires", "cat": "Entreprise / travail"}, {"en": "full-time", "fr": "temps plein", "cat": "Entreprise / travail"}, {"en": "part-time", "fr": "temps partiel", "cat": "Entreprise / travail"}, {"en": "meeting", "fr": "réunion", "cat": "Réunions / organisation"}, {"en": "appointment", "fr": "rendez-vous", "cat": "Réunions / organisation"}, {"en": "conference", "fr": "conférence", "cat": "Réunions / organisation"}, {"en": "seminar", "fr": "séminaire", "cat": "Réunions / organisation"}, {"en": "workshop", "fr": "atelier / formation", "cat": "Réunions / organisation"}, {"en": "presentation", "fr": "présentation", "cat": "Réunions / organisation"}, {"en": "agenda", "fr": "ordre du jour", "cat": "Réunions / organisation"}, {"en": "minutes", "fr": "compte rendu", "cat": "Réunions / organisation"}, {"en": "report", "fr": "rapport", "cat": "Réunions / organisation"}, {"en": "document", "fr": "document", "cat": "Réunions / organisation"}, {"en": "file", "fr": "dossier / fichier", "cat": "Réunions / organisation"}, {"en": "folder", "fr": "dossier", "cat": "Réunions / organisation"}, {"en": "notice", "fr": "avis / annonce", "cat": "Réunions / organisation"}, {"en": "announcement", "fr": "annonce", "cat": "Réunions / organisation"}, {"en": "memo", "fr": "note interne", "cat": "Réunions / organisation"}, {"en": "update", "fr": "mise à jour", "cat": "Réunions / organisation"}, {"en": "reminder", "fr": "rappel", "cat": "Réunions / organisation"}, {"en": "decision", "fr": "décision", "cat": "Réunions / organisation"}, {"en": "proposal", "fr": "proposition", "cat": "Réunions / organisation"}, {"en": "plan", "fr": "plan / projet", "cat": "Réunions / organisation"}, {"en": "goal", "fr": "objectif", "cat": "Réunions / organisation"}, {"en": "target", "fr": "cible / objectif", "cat": "Réunions / organisation"}, {"en": "issue", "fr": "problème / sujet", "cat": "Réunions / organisation"}, {"en": "concern", "fr": "préoccupation", "cat": "Réunions / organisation"}, {"en": "solution", "fr": "solution", "cat": "Réunions / organisation"}, {"en": "feedback", "fr": "retour / avis", "cat": "Réunions / organisation"}, {"en": "approval", "fr": "approbation", "cat": "Réunions / organisation"}, {"en": "agreement", "fr": "accord", "cat": "Réunions / organisation"}, {"en": "arrangement", "fr": "organisation / arrangement", "cat": "Réunions / organisation"}, {"en": "preparation", "fr": "préparation", "cat": "Réunions / organisation"}, {"en": "attendance", "fr": "présence", "cat": "Réunions / organisation"}, {"en": "attendee", "fr": "participant", "cat": "Réunions / organisation"}, {"en": "participant", "fr": "participant", "cat": "Réunions / organisation"}, {"en": "speaker", "fr": "intervenant", "cat": "Réunions / organisation"}, {"en": "host", "fr": "hôte / organisateur", "cat": "Réunions / organisation"}, {"en": "guest", "fr": "invité", "cat": "Réunions / organisation"}, {"en": "to manage", "fr": "gérer", "cat": "Verbes essentiels"}, {"en": "to organize", "fr": "organiser", "cat": "Verbes essentiels"}, {"en": "to arrange", "fr": "organiser / prévoir", "cat": "Verbes essentiels"}, {"en": "to schedule", "fr": "planifier", "cat": "Verbes essentiels"}, {"en": "to postpone", "fr": "reporter", "cat": "Verbes essentiels"}, {"en": "to delay", "fr": "retarder", "cat": "Verbes essentiels"}, {"en": "to cancel", "fr": "annuler", "cat": "Verbes essentiels"}, {"en": "to confirm", "fr": "confirmer", "cat": "Verbes essentiels"}, {"en": "to attend", "fr": "assister à", "cat": "Verbes essentiels"}, {"en": "to join", "fr": "rejoindre / participer", "cat": "Verbes essentiels"}, {"en": "to participate", "fr": "participer", "cat": "Verbes essentiels"}, {"en": "to prepare", "fr": "préparer", "cat": "Verbes essentiels"}, {"en": "to provide", "fr": "fournir", "cat": "Verbes essentiels"}, {"en": "to supply", "fr": "fournir", "cat": "Verbes essentiels"}, {"en": "to require", "fr": "exiger / nécessiter", "cat": "Verbes essentiels"}, {"en": "to request", "fr": "demander", "cat": "Verbes essentiels"}, {"en": "to ask", "fr": "demander", "cat": "Verbes essentiels"}, {"en": "to answer", "fr": "répondre", "cat": "Verbes essentiels"}, {"en": "to reply", "fr": "répondre", "cat": "Verbes essentiels"}, {"en": "to contact", "fr": "contacter", "cat": "Verbes essentiels"}, {"en": "to inform", "fr": "informer", "cat": "Verbes essentiels"}, {"en": "to notify", "fr": "prévenir / notifier", "cat": "Verbes essentiels"}, {"en": "to announce", "fr": "annoncer", "cat": "Verbes essentiels"}, {"en": "to explain", "fr": "expliquer", "cat": "Verbes essentiels"}, {"en": "to describe", "fr": "décrire", "cat": "Verbes essentiels"}, {"en": "to discuss", "fr": "discuter", "cat": "Verbes essentiels"}, {"en": "to review", "fr": "examiner / relire", "cat": "Verbes essentiels"}, {"en": "to approve", "fr": "approuver", "cat": "Verbes essentiels"}, {"en": "to reject", "fr": "rejeter", "cat": "Verbes essentiels"}, {"en": "to complete", "fr": "terminer", "cat": "Verbes essentiels"}, {"en": "to finish", "fr": "finir", "cat": "Verbes essentiels"}, {"en": "to submit", "fr": "soumettre / rendre", "cat": "Verbes essentiels"}, {"en": "to deliver", "fr": "livrer / remettre", "cat": "Verbes essentiels"}, {"en": "to receive", "fr": "recevoir", "cat": "Verbes essentiels"}, {"en": "to send", "fr": "envoyer", "cat": "Verbes essentiels"}, {"en": "to forward", "fr": "transférer", "cat": "Verbes essentiels"}, {"en": "to attach", "fr": "joindre", "cat": "Verbes essentiels"}, {"en": "to include", "fr": "inclure", "cat": "Verbes essentiels"}, {"en": "to update", "fr": "mettre à jour", "cat": "Verbes essentiels"}, {"en": "to improve", "fr": "améliorer", "cat": "Verbes essentiels"}, {"en": "to increase", "fr": "augmenter", "cat": "Verbes essentiels"}, {"en": "to decrease", "fr": "diminuer", "cat": "Verbes essentiels"}, {"en": "to reduce", "fr": "réduire", "cat": "Verbes essentiels"}, {"en": "to solve", "fr": "résoudre", "cat": "Verbes essentiels"}, {"en": "to fix", "fr": "réparer / corriger", "cat": "Verbes essentiels"}, {"en": "to replace", "fr": "remplacer", "cat": "Verbes essentiels"}, {"en": "to maintain", "fr": "entretenir", "cat": "Verbes essentiels"}, {"en": "to check", "fr": "vérifier", "cat": "Verbes essentiels"}, {"en": "to inspect", "fr": "inspecter", "cat": "Verbes essentiels"}, {"en": "to handle", "fr": "gérer / s’occuper de", "cat": "Verbes essentiels"}, {"en": "to deal with", "fr": "traiter / gérer", "cat": "Verbes essentiels"}, {"en": "to be responsible for", "fr": "être responsable de", "cat": "Verbes essentiels"}, {"en": "email", "fr": "e-mail", "cat": "Mails / documents"}, {"en": "message", "fr": "message", "cat": "Mails / documents"}, {"en": "letter", "fr": "lettre", "cat": "Mails / documents"}, {"en": "attachment", "fr": "pièce jointe", "cat": "Mails / documents"}, {"en": "attached file", "fr": "fichier joint", "cat": "Mails / documents"}, {"en": "inbox", "fr": "boîte de réception", "cat": "Mails / documents"}, {"en": "subject", "fr": "objet du mail", "cat": "Mails / documents"}, {"en": "recipient", "fr": "destinataire", "cat": "Mails / documents"}, {"en": "sender", "fr": "expéditeur", "cat": "Mails / documents"}, {"en": "reply", "fr": "réponse", "cat": "Mails / documents"}, {"en": "request", "fr": "demande", "cat": "Mails / documents"}, {"en": "inquiry", "fr": "demande / renseignement", "cat": "Mails / documents"}, {"en": "information", "fr": "information", "cat": "Mails / documents"}, {"en": "form", "fr": "formulaire", "cat": "Mails / documents"}, {"en": "application form", "fr": "formulaire de candidature", "cat": "Mails / documents"}, {"en": "invoice", "fr": "facture", "cat": "Mails / documents"}, {"en": "receipt", "fr": "reçu", "cat": "Mails / documents"}, {"en": "quotation", "fr": "devis", "cat": "Mails / documents"}, {"en": "quote", "fr": "devis", "cat": "Mails / documents"}, {"en": "estimate", "fr": "estimation / devis", "cat": "Mails / documents"}, {"en": "order", "fr": "commande", "cat": "Mails / documents"}, {"en": "purchase order", "fr": "bon de commande", "cat": "Mails / documents"}, {"en": "contract", "fr": "contrat", "cat": "Mails / documents"}, {"en": "terms and conditions", "fr": "conditions générales", "cat": "Mails / documents"}, {"en": "policy", "fr": "politique / règlement", "cat": "Mails / documents"}, {"en": "brochure", "fr": "brochure", "cat": "Mails / documents"}, {"en": "leaflet", "fr": "prospectus", "cat": "Mails / documents"}, {"en": "manual", "fr": "manuel", "cat": "Mails / documents"}, {"en": "instructions", "fr": "consignes", "cat": "Mails / documents"}, {"en": "guidelines", "fr": "lignes directrices", "cat": "Mails / documents"}, {"en": "record", "fr": "dossier / enregistrement", "cat": "Mails / documents"}, {"en": "copy", "fr": "copie", "cat": "Mails / documents"}, {"en": "original", "fr": "original", "cat": "Mails / documents"}, {"en": "signature", "fr": "signature", "cat": "Mails / documents"}, {"en": "stamp", "fr": "tampon", "cat": "Mails / documents"}, {"en": "delivery note", "fr": "bon de livraison", "cat": "Mails / documents"}, {"en": "Please find attached", "fr": "Veuillez trouver ci-joint", "cat": "Mails / documents"}, {"en": "I am writing to", "fr": "Je vous écris pour", "cat": "Mails / documents"}, {"en": "Thank you for your inquiry", "fr": "Merci pour votre demande", "cat": "Mails / documents"}, {"en": "Do not hesitate to contact us", "fr": "N’hésitez pas à nous contacter", "cat": "Mails / documents"}, {"en": "as soon as possible", "fr": "dès que possible", "cat": "Mails / documents"}, {"en": "at your earliest convenience", "fr": "dès que possible / quand cela vous arrange", "cat": "Mails / documents"}, {"en": "further information", "fr": "informations complémentaires", "cat": "Mails / documents"}, {"en": "regarding", "fr": "concernant", "cat": "Mails / documents"}, {"en": "concerning", "fr": "concernant", "cat": "Mails / documents"}, {"en": "in response to", "fr": "en réponse à", "cat": "Mails / documents"}, {"en": "job", "fr": "emploi", "cat": "Recrutement / RH"}, {"en": "vacancy", "fr": "poste vacant", "cat": "Recrutement / RH"}, {"en": "applicant", "fr": "candidat", "cat": "Recrutement / RH"}, {"en": "candidate", "fr": "candidat", "cat": "Recrutement / RH"}, {"en": "application", "fr": "candidature", "cat": "Recrutement / RH"}, {"en": "resume", "fr": "CV", "cat": "Recrutement / RH"}, {"en": "CV", "fr": "CV", "cat": "Recrutement / RH"}, {"en": "cover letter", "fr": "lettre de motivation", "cat": "Recrutement / RH"}, {"en": "interview", "fr": "entretien", "cat": "Recrutement / RH"}, {"en": "recruiter", "fr": "recruteur", "cat": "Recrutement / RH"}, {"en": "hiring", "fr": "recrutement", "cat": "Recrutement / RH"}, {"en": "training", "fr": "formation", "cat": "Recrutement / RH"}, {"en": "experience", "fr": "expérience", "cat": "Recrutement / RH"}, {"en": "skill", "fr": "compétence", "cat": "Recrutement / RH"}, {"en": "qualification", "fr": "qualification", "cat": "Recrutement / RH"}, {"en": "degree", "fr": "diplôme", "cat": "Recrutement / RH"}, {"en": "reference", "fr": "référence", "cat": "Recrutement / RH"}, {"en": "salary", "fr": "salaire", "cat": "Recrutement / RH"}, {"en": "wage", "fr": "salaire horaire", "cat": "Recrutement / RH"}, {"en": "benefits", "fr": "avantages", "cat": "Recrutement / RH"}, {"en": "promotion", "fr": "promotion", "cat": "Recrutement / RH"}, {"en": "raise", "fr": "augmentation", "cat": "Recrutement / RH"}, {"en": "internship", "fr": "stage", "cat": "Recrutement / RH"}, {"en": "trainee", "fr": "stagiaire", "cat": "Recrutement / RH"}, {"en": "apprentice", "fr": "alternant / apprenti", "cat": "Recrutement / RH"}, {"en": "leave", "fr": "congé", "cat": "Recrutement / RH"}, {"en": "sick leave", "fr": "arrêt maladie", "cat": "Recrutement / RH"}, {"en": "maternity leave", "fr": "congé maternité", "cat": "Recrutement / RH"}, {"en": "retirement", "fr": "retraite", "cat": "Recrutement / RH"}, {"en": "resignation", "fr": "démission", "cat": "Recrutement / RH"}, {"en": "to hire", "fr": "embaucher", "cat": "Recrutement / RH"}, {"en": "to apply", "fr": "postuler", "cat": "Recrutement / RH"}, {"en": "to train", "fr": "former", "cat": "Recrutement / RH"}, {"en": "to resign", "fr": "démissionner", "cat": "Recrutement / RH"}, {"en": "to promote", "fr": "promouvoir", "cat": "Recrutement / RH"}, {"en": "to interview", "fr": "faire passer un entretien", "cat": "Recrutement / RH"}, {"en": "price", "fr": "prix", "cat": "Argent / finance"}, {"en": "cost", "fr": "coût", "cat": "Argent / finance"}, {"en": "fee", "fr": "frais / honoraires", "cat": "Argent / finance"}, {"en": "charge", "fr": "frais", "cat": "Argent / finance"}, {"en": "payment", "fr": "paiement", "cat": "Argent / finance"}, {"en": "bill", "fr": "facture", "cat": "Argent / finance"}, {"en": "refund", "fr": "remboursement", "cat": "Argent / finance"}, {"en": "discount", "fr": "réduction", "cat": "Argent / finance"}, {"en": "sale", "fr": "vente / soldes", "cat": "Argent / finance"}, {"en": "purchase", "fr": "achat", "cat": "Argent / finance"}, {"en": "budget", "fr": "budget", "cat": "Argent / finance"}, {"en": "expense", "fr": "dépense", "cat": "Argent / finance"}, {"en": "income", "fr": "revenu", "cat": "Argent / finance"}, {"en": "profit", "fr": "bénéfice", "cat": "Argent / finance"}, {"en": "loss", "fr": "perte", "cat": "Argent / finance"}, {"en": "revenue", "fr": "chiffre d’affaires / recettes", "cat": "Argent / finance"}, {"en": "tax", "fr": "taxe / impôt", "cat": "Argent / finance"}, {"en": "VAT", "fr": "TVA", "cat": "Argent / finance"}, {"en": "rate", "fr": "taux", "cat": "Argent / finance"}, {"en": "amount", "fr": "montant", "cat": "Argent / finance"}, {"en": "total", "fr": "total", "cat": "Argent / finance"}, {"en": "deposit", "fr": "acompte / dépôt", "cat": "Argent / finance"}, {"en": "balance", "fr": "solde", "cat": "Argent / finance"}, {"en": "account", "fr": "compte", "cat": "Argent / finance"}, {"en": "bank transfer", "fr": "virement bancaire", "cat": "Argent / finance"}, {"en": "cash", "fr": "espèces", "cat": "Argent / finance"}, {"en": "credit card", "fr": "carte bancaire", "cat": "Argent / finance"}, {"en": "loan", "fr": "prêt", "cat": "Argent / finance"}, {"en": "investment", "fr": "investissement", "cat": "Argent / finance"}, {"en": "financial statement", "fr": "état financier", "cat": "Argent / finance"}, {"en": "to pay", "fr": "payer", "cat": "Argent / finance"}, {"en": "to charge", "fr": "facturer", "cat": "Argent / finance"}, {"en": "to spend", "fr": "dépenser", "cat": "Argent / finance"}, {"en": "to save", "fr": "économiser", "cat": "Argent / finance"}, {"en": "to earn", "fr": "gagner de l’argent", "cat": "Argent / finance"}, {"en": "to refund", "fr": "rembourser", "cat": "Argent / finance"}, {"en": "to afford", "fr": "avoir les moyens", "cat": "Argent / finance"}, {"en": "to estimate", "fr": "estimer", "cat": "Argent / finance"}, {"en": "trip", "fr": "voyage / déplacement", "cat": "Transport / voyage"}, {"en": "travel", "fr": "voyage", "cat": "Transport / voyage"}, {"en": "journey", "fr": "trajet", "cat": "Transport / voyage"}, {"en": "flight", "fr": "vol", "cat": "Transport / voyage"}, {"en": "airport", "fr": "aéroport", "cat": "Transport / voyage"}, {"en": "train station", "fr": "gare", "cat": "Transport / voyage"}, {"en": "platform", "fr": "quai", "cat": "Transport / voyage"}, {"en": "gate", "fr": "porte d’embarquement", "cat": "Transport / voyage"}, {"en": "departure", "fr": "départ", "cat": "Transport / voyage"}, {"en": "arrival", "fr": "arrivée", "cat": "Transport / voyage"}, {"en": "cancellation", "fr": "annulation", "cat": "Transport / voyage"}, {"en": "ticket", "fr": "billet", "cat": "Transport / voyage"}, {"en": "boarding pass", "fr": "carte d’embarquement", "cat": "Transport / voyage"}, {"en": "luggage", "fr": "bagage", "cat": "Transport / voyage"}, {"en": "baggage", "fr": "bagage", "cat": "Transport / voyage"}, {"en": "suitcase", "fr": "valise", "cat": "Transport / voyage"}, {"en": "carry-on bag", "fr": "bagage cabine", "cat": "Transport / voyage"}, {"en": "passenger", "fr": "passager", "cat": "Transport / voyage"}, {"en": "driver", "fr": "conducteur", "cat": "Transport / voyage"}, {"en": "shuttle", "fr": "navette", "cat": "Transport / voyage"}, {"en": "rental car", "fr": "voiture de location", "cat": "Transport / voyage"}, {"en": "traffic", "fr": "circulation", "cat": "Transport / voyage"}, {"en": "traffic jam", "fr": "embouteillage", "cat": "Transport / voyage"}, {"en": "route", "fr": "itinéraire", "cat": "Transport / voyage"}, {"en": "directions", "fr": "indications", "cat": "Transport / voyage"}, {"en": "map", "fr": "carte / plan", "cat": "Transport / voyage"}, {"en": "destination", "fr": "destination", "cat": "Transport / voyage"}, {"en": "accommodation", "fr": "hébergement", "cat": "Transport / voyage"}, {"en": "hotel", "fr": "hôtel", "cat": "Transport / voyage"}, {"en": "reservation", "fr": "réservation", "cat": "Transport / voyage"}, {"en": "booking", "fr": "réservation", "cat": "Transport / voyage"}, {"en": "check-in", "fr": "enregistrement / arrivée", "cat": "Transport / voyage"}, {"en": "check-out", "fr": "départ de l’hôtel", "cat": "Transport / voyage"}, {"en": "room", "fr": "chambre", "cat": "Transport / voyage"}, {"en": "front desk", "fr": "réception", "cat": "Transport / voyage"}, {"en": "lobby", "fr": "hall", "cat": "Transport / voyage"}, {"en": "available", "fr": "disponible", "cat": "Transport / voyage"}, {"en": "unavailable", "fr": "indisponible", "cat": "Transport / voyage"}, {"en": "to book", "fr": "réserver", "cat": "Transport / voyage"}, {"en": "to reserve", "fr": "réserver", "cat": "Transport / voyage"}, {"en": "to board", "fr": "embarquer", "cat": "Transport / voyage"}, {"en": "to depart", "fr": "partir", "cat": "Transport / voyage"}, {"en": "to arrive", "fr": "arriver", "cat": "Transport / voyage"}, {"en": "to rent", "fr": "louer", "cat": "Transport / voyage"}, {"en": "to check in", "fr": "s’enregistrer", "cat": "Transport / voyage"}, {"en": "to pick up", "fr": "récupérer", "cat": "Transport / voyage"}, {"en": "to drop off", "fr": "déposer", "cat": "Transport / voyage"}, {"en": "shipment", "fr": "expédition", "cat": "Livraison / logistique"}, {"en": "delivery", "fr": "livraison", "cat": "Livraison / logistique"}, {"en": "package", "fr": "colis", "cat": "Livraison / logistique"}, {"en": "parcel", "fr": "colis", "cat": "Livraison / logistique"}, {"en": "item", "fr": "article", "cat": "Livraison / logistique"}, {"en": "product", "fr": "produit", "cat": "Livraison / logistique"}, {"en": "goods", "fr": "marchandises", "cat": "Livraison / logistique"}, {"en": "warehouse", "fr": "entrepôt", "cat": "Livraison / logistique"}, {"en": "stock", "fr": "stock", "cat": "Livraison / logistique"}, {"en": "inventory", "fr": "inventaire / stock", "cat": "Livraison / logistique"}, {"en": "supply", "fr": "approvisionnement", "cat": "Livraison / logistique"}, {"en": "manufacturer", "fr": "fabricant", "cat": "Livraison / logistique"}, {"en": "carrier", "fr": "transporteur", "cat": "Livraison / logistique"}, {"en": "truck", "fr": "camion", "cat": "Livraison / logistique"}, {"en": "loading", "fr": "chargement", "cat": "Livraison / logistique"}, {"en": "unloading", "fr": "déchargement", "cat": "Livraison / logistique"}, {"en": "damage", "fr": "dommage / dégât", "cat": "Livraison / logistique"}, {"en": "damaged", "fr": "endommagé", "cat": "Livraison / logistique"}, {"en": "missing", "fr": "manquant", "cat": "Livraison / logistique"}, {"en": "out of stock", "fr": "en rupture de stock", "cat": "Livraison / logistique"}, {"en": "in stock", "fr": "en stock", "cat": "Livraison / logistique"}, {"en": "replacement", "fr": "remplacement", "cat": "Livraison / logistique"}, {"en": "return", "fr": "retour", "cat": "Livraison / logistique"}, {"en": "tracking number", "fr": "numéro de suivi", "cat": "Livraison / logistique"}, {"en": "delivery date", "fr": "date de livraison", "cat": "Livraison / logistique"}, {"en": "to order", "fr": "commander", "cat": "Livraison / logistique"}, {"en": "to ship", "fr": "expédier", "cat": "Livraison / logistique"}, {"en": "to return", "fr": "retourner", "cat": "Livraison / logistique"}, {"en": "to track", "fr": "suivre", "cat": "Livraison / logistique"}, {"en": "to load", "fr": "charger", "cat": "Livraison / logistique"}, {"en": "to unload", "fr": "décharger", "cat": "Livraison / logistique"}, {"en": "to store", "fr": "stocker", "cat": "Livraison / logistique"}, {"en": "to run out of", "fr": "manquer de", "cat": "Livraison / logistique"}, {"en": "store", "fr": "magasin", "cat": "Commerce / service client"}, {"en": "shop", "fr": "magasin", "cat": "Commerce / service client"}, {"en": "retailer", "fr": "détaillant", "cat": "Commerce / service client"}, {"en": "customer service", "fr": "service client", "cat": "Commerce / service client"}, {"en": "cashier", "fr": "caissier", "cat": "Commerce / service client"}, {"en": "salesperson", "fr": "vendeur", "cat": "Commerce / service client"}, {"en": "aisle", "fr": "rayon / allée", "cat": "Commerce / service client"}, {"en": "shelf", "fr": "étagère", "cat": "Commerce / service client"}, {"en": "display", "fr": "présentoir", "cat": "Commerce / service client"}, {"en": "counter", "fr": "comptoir", "cat": "Commerce / service client"}, {"en": "fitting room", "fr": "cabine d’essayage", "cat": "Commerce / service client"}, {"en": "size", "fr": "taille", "cat": "Commerce / service client"}, {"en": "brand", "fr": "marque", "cat": "Commerce / service client"}, {"en": "price tag", "fr": "étiquette de prix", "cat": "Commerce / service client"}, {"en": "exchange", "fr": "échange", "cat": "Commerce / service client"}, {"en": "warranty", "fr": "garantie", "cat": "Commerce / service client"}, {"en": "complaint", "fr": "réclamation", "cat": "Commerce / service client"}, {"en": "satisfaction", "fr": "satisfaction", "cat": "Commerce / service client"}, {"en": "survey", "fr": "enquête", "cat": "Commerce / service client"}, {"en": "membership", "fr": "adhésion", "cat": "Commerce / service client"}, {"en": "subscription", "fr": "abonnement", "cat": "Commerce / service client"}, {"en": "to buy", "fr": "acheter", "cat": "Commerce / service client"}, {"en": "to sell", "fr": "vendre", "cat": "Commerce / service client"}, {"en": "to purchase", "fr": "acheter", "cat": "Commerce / service client"}, {"en": "to browse", "fr": "regarder / parcourir", "cat": "Commerce / service client"}, {"en": "to choose", "fr": "choisir", "cat": "Commerce / service client"}, {"en": "to compare", "fr": "comparer", "cat": "Commerce / service client"}, {"en": "to recommend", "fr": "recommander", "cat": "Commerce / service client"}, {"en": "to complain", "fr": "se plaindre", "cat": "Commerce / service client"}, {"en": "to exchange", "fr": "échanger", "cat": "Commerce / service client"}, {"en": "building", "fr": "bâtiment", "cat": "Bâtiment / maintenance"}, {"en": "facility", "fr": "installation / locaux", "cat": "Bâtiment / maintenance"}, {"en": "property", "fr": "propriété / bien", "cat": "Bâtiment / maintenance"}, {"en": "site", "fr": "site / chantier", "cat": "Bâtiment / maintenance"}, {"en": "construction", "fr": "construction", "cat": "Bâtiment / maintenance"}, {"en": "renovation", "fr": "rénovation", "cat": "Bâtiment / maintenance"}, {"en": "repair", "fr": "réparation", "cat": "Bâtiment / maintenance"}, {"en": "maintenance", "fr": "entretien", "cat": "Bâtiment / maintenance"}, {"en": "equipment", "fr": "équipement", "cat": "Bâtiment / maintenance"}, {"en": "tool", "fr": "outil", "cat": "Bâtiment / maintenance"}, {"en": "machine", "fr": "machine", "cat": "Bâtiment / maintenance"}, {"en": "device", "fr": "appareil", "cat": "Bâtiment / maintenance"}, {"en": "appliance", "fr": "appareil électroménager", "cat": "Bâtiment / maintenance"}, {"en": "elevator", "fr": "ascenseur", "cat": "Bâtiment / maintenance"}, {"en": "lift", "fr": "ascenseur", "cat": "Bâtiment / maintenance"}, {"en": "stairs", "fr": "escaliers", "cat": "Bâtiment / maintenance"}, {"en": "floor", "fr": "étage / sol", "cat": "Bâtiment / maintenance"}, {"en": "ceiling", "fr": "plafond", "cat": "Bâtiment / maintenance"}, {"en": "wall", "fr": "mur", "cat": "Bâtiment / maintenance"}, {"en": "roof", "fr": "toit", "cat": "Bâtiment / maintenance"}, {"en": "window", "fr": "fenêtre", "cat": "Bâtiment / maintenance"}, {"en": "door", "fr": "porte", "cat": "Bâtiment / maintenance"}, {"en": "entrance", "fr": "entrée", "cat": "Bâtiment / maintenance"}, {"en": "exit", "fr": "sortie", "cat": "Bâtiment / maintenance"}, {"en": "hallway", "fr": "couloir", "cat": "Bâtiment / maintenance"}, {"en": "parking lot", "fr": "parking", "cat": "Bâtiment / maintenance"}, {"en": "sign", "fr": "panneau", "cat": "Bâtiment / maintenance"}, {"en": "safety", "fr": "sécurité", "cat": "Bâtiment / maintenance"}, {"en": "inspection", "fr": "inspection", "cat": "Bâtiment / maintenance"}, {"en": "permit", "fr": "permis / autorisation", "cat": "Bâtiment / maintenance"}, {"en": "leak", "fr": "fuite", "cat": "Bâtiment / maintenance"}, {"en": "power outage", "fr": "coupure de courant", "cat": "Bâtiment / maintenance"}, {"en": "heating", "fr": "chauffage", "cat": "Bâtiment / maintenance"}, {"en": "air conditioning", "fr": "climatisation", "cat": "Bâtiment / maintenance"}, {"en": "plumbing", "fr": "plomberie", "cat": "Bâtiment / maintenance"}, {"en": "electrical system", "fr": "système électrique", "cat": "Bâtiment / maintenance"}, {"en": "technician", "fr": "technicien", "cat": "Bâtiment / maintenance"}, {"en": "engineer", "fr": "ingénieur", "cat": "Bâtiment / maintenance"}, {"en": "architect", "fr": "architecte", "cat": "Bâtiment / maintenance"}, {"en": "construction worker", "fr": "ouvrier du bâtiment", "cat": "Bâtiment / maintenance"}, {"en": "to build", "fr": "construire", "cat": "Bâtiment / maintenance"}, {"en": "to install", "fr": "installer", "cat": "Bâtiment / maintenance"}, {"en": "to renovate", "fr": "rénover", "cat": "Bâtiment / maintenance"}, {"en": "to upgrade", "fr": "améliorer / moderniser", "cat": "Bâtiment / maintenance"}, {"en": "to clean", "fr": "nettoyer", "cat": "Bâtiment / maintenance"}, {"en": "to paint", "fr": "peindre", "cat": "Bâtiment / maintenance"}, {"en": "to remove", "fr": "enlever", "cat": "Bâtiment / maintenance"}, {"en": "health", "fr": "santé", "cat": "Santé / sécurité"}, {"en": "rule", "fr": "règle", "cat": "Santé / sécurité"}, {"en": "regulation", "fr": "réglementation", "cat": "Santé / sécurité"}, {"en": "procedure", "fr": "procédure", "cat": "Santé / sécurité"}, {"en": "requirement", "fr": "exigence", "cat": "Santé / sécurité"}, {"en": "warning", "fr": "avertissement", "cat": "Santé / sécurité"}, {"en": "risk", "fr": "risque", "cat": "Santé / sécurité"}, {"en": "hazard", "fr": "danger", "cat": "Santé / sécurité"}, {"en": "accident", "fr": "accident", "cat": "Santé / sécurité"}, {"en": "injury", "fr": "blessure", "cat": "Santé / sécurité"}, {"en": "emergency", "fr": "urgence", "cat": "Santé / sécurité"}, {"en": "first aid", "fr": "premiers secours", "cat": "Santé / sécurité"}, {"en": "fire alarm", "fr": "alarme incendie", "cat": "Santé / sécurité"}, {"en": "fire drill", "fr": "exercice incendie", "cat": "Santé / sécurité"}, {"en": "evacuation", "fr": "évacuation", "cat": "Santé / sécurité"}, {"en": "protective equipment", "fr": "équipement de protection", "cat": "Santé / sécurité"}, {"en": "helmet", "fr": "casque", "cat": "Santé / sécurité"}, {"en": "gloves", "fr": "gants", "cat": "Santé / sécurité"}, {"en": "goggles", "fr": "lunettes de protection", "cat": "Santé / sécurité"}, {"en": "mask", "fr": "masque", "cat": "Santé / sécurité"}, {"en": "insurance", "fr": "assurance", "cat": "Santé / sécurité"}, {"en": "medical appointment", "fr": "rendez-vous médical", "cat": "Santé / sécurité"}, {"en": "to warn", "fr": "avertir", "cat": "Santé / sécurité"}, {"en": "to avoid", "fr": "éviter", "cat": "Santé / sécurité"}, {"en": "to prevent", "fr": "empêcher / prévenir", "cat": "Santé / sécurité"}, {"en": "to protect", "fr": "protéger", "cat": "Santé / sécurité"}, {"en": "to follow", "fr": "suivre", "cat": "Santé / sécurité"}, {"en": "to comply with", "fr": "respecter / se conformer à", "cat": "Santé / sécurité"}, {"en": "to report", "fr": "signaler", "cat": "Santé / sécurité"}, {"en": "today", "fr": "aujourd’hui", "cat": "Temps / planning"}, {"en": "tomorrow", "fr": "demain", "cat": "Temps / planning"}, {"en": "yesterday", "fr": "hier", "cat": "Temps / planning"}, {"en": "daily", "fr": "quotidien", "cat": "Temps / planning"}, {"en": "weekly", "fr": "hebdomadaire", "cat": "Temps / planning"}, {"en": "monthly", "fr": "mensuel", "cat": "Temps / planning"}, {"en": "yearly", "fr": "annuel", "cat": "Temps / planning"}, {"en": "annually", "fr": "annuel", "cat": "Temps / planning"}, {"en": "soon", "fr": "bientôt", "cat": "Temps / planning"}, {"en": "earlier", "fr": "plus tôt", "cat": "Temps / planning"}, {"en": "later", "fr": "plus tard", "cat": "Temps / planning"}, {"en": "recently", "fr": "récemment", "cat": "Temps / planning"}, {"en": "currently", "fr": "actuellement", "cat": "Temps / planning"}, {"en": "immediately", "fr": "immédiatement", "cat": "Temps / planning"}, {"en": "shortly", "fr": "bientôt / sous peu", "cat": "Temps / planning"}, {"en": "in advance", "fr": "à l’avance", "cat": "Temps / planning"}, {"en": "on time", "fr": "à l’heure", "cat": "Temps / planning"}, {"en": "late", "fr": "en retard", "cat": "Temps / planning"}, {"en": "due date", "fr": "date d’échéance", "cat": "Temps / planning"}, {"en": "opening hours", "fr": "horaires d’ouverture", "cat": "Temps / planning"}, {"en": "business hours", "fr": "heures de bureau", "cat": "Temps / planning"}, {"en": "temporary", "fr": "temporaire", "cat": "Temps / planning"}, {"en": "permanent", "fr": "permanent", "cat": "Temps / planning"}, {"en": "previous", "fr": "précédent", "cat": "Temps / planning"}, {"en": "next", "fr": "prochain", "cat": "Temps / planning"}, {"en": "following", "fr": "suivant", "cat": "Temps / planning"}, {"en": "actually", "fr": "en fait", "cat": "Temps / planning"}, {"en": "eventually", "fr": "finalement / à terme", "cat": "Temps / planning"}, {"en": "finally", "fr": "enfin / finalement", "cat": "Temps / planning"}, {"en": "lately", "fr": "dernièrement", "cat": "Temps / planning"}, {"en": "briefly", "fr": "brièvement", "cat": "Temps / planning"}, {"en": "because", "fr": "parce que", "cat": "Connecteurs"}, {"en": "because of", "fr": "à cause de / en raison de", "cat": "Connecteurs"}, {"en": "due to", "fr": "en raison de", "cat": "Connecteurs"}, {"en": "since", "fr": "puisque / depuis", "cat": "Connecteurs"}, {"en": "as", "fr": "comme / puisque", "cat": "Connecteurs"}, {"en": "therefore", "fr": "donc / par conséquent", "cat": "Connecteurs"}, {"en": "thus", "fr": "ainsi", "cat": "Connecteurs"}, {"en": "consequently", "fr": "par conséquent", "cat": "Connecteurs"}, {"en": "however", "fr": "cependant", "cat": "Connecteurs"}, {"en": "nevertheless", "fr": "néanmoins", "cat": "Connecteurs"}, {"en": "although", "fr": "bien que", "cat": "Connecteurs"}, {"en": "even though", "fr": "même si", "cat": "Connecteurs"}, {"en": "despite", "fr": "malgré", "cat": "Connecteurs"}, {"en": "in spite of", "fr": "malgré", "cat": "Connecteurs"}, {"en": "whereas", "fr": "tandis que", "cat": "Connecteurs"}, {"en": "while", "fr": "pendant que / tandis que", "cat": "Connecteurs"}, {"en": "unless", "fr": "sauf si", "cat": "Connecteurs"}, {"en": "if", "fr": "si", "cat": "Connecteurs"}, {"en": "whether", "fr": "si / que… ou non", "cat": "Connecteurs"}, {"en": "moreover", "fr": "de plus", "cat": "Connecteurs"}, {"en": "furthermore", "fr": "en outre", "cat": "Connecteurs"}, {"en": "in addition", "fr": "en plus", "cat": "Connecteurs"}, {"en": "besides", "fr": "de plus", "cat": "Connecteurs"}, {"en": "also", "fr": "aussi", "cat": "Connecteurs"}, {"en": "either", "fr": "l’un ou l’autre / non plus", "cat": "Connecteurs"}, {"en": "neither", "fr": "ni l’un ni l’autre", "cat": "Connecteurs"}, {"en": "both", "fr": "les deux", "cat": "Connecteurs"}, {"en": "unlike", "fr": "contrairement à", "cat": "Connecteurs"}, {"en": "instead of", "fr": "au lieu de", "cat": "Connecteurs"}, {"en": "rather than", "fr": "plutôt que", "cat": "Connecteurs"}, {"en": "according to", "fr": "selon", "cat": "Connecteurs"}, {"en": "convenient", "fr": "pratique", "cat": "Adjectifs"}, {"en": "suitable", "fr": "adapté", "cat": "Adjectifs"}, {"en": "appropriate", "fr": "approprié", "cat": "Adjectifs"}, {"en": "necessary", "fr": "nécessaire", "cat": "Adjectifs"}, {"en": "required", "fr": "requis", "cat": "Adjectifs"}, {"en": "mandatory", "fr": "obligatoire", "cat": "Adjectifs"}, {"en": "optional", "fr": "facultatif", "cat": "Adjectifs"}, {"en": "efficient", "fr": "efficace", "cat": "Adjectifs"}, {"en": "effective", "fr": "efficace", "cat": "Adjectifs"}, {"en": "reliable", "fr": "fiable", "cat": "Adjectifs"}, {"en": "responsible", "fr": "responsable", "cat": "Adjectifs"}, {"en": "experienced", "fr": "expérimenté", "cat": "Adjectifs"}, {"en": "qualified", "fr": "qualifié", "cat": "Adjectifs"}, {"en": "successful", "fr": "réussi", "cat": "Adjectifs"}, {"en": "profitable", "fr": "rentable", "cat": "Adjectifs"}, {"en": "affordable", "fr": "abordable", "cat": "Adjectifs"}, {"en": "expensive", "fr": "cher", "cat": "Adjectifs"}, {"en": "cheap", "fr": "bon marché", "cat": "Adjectifs"}, {"en": "reasonable", "fr": "raisonnable", "cat": "Adjectifs"}, {"en": "accurate", "fr": "précis", "cat": "Adjectifs"}, {"en": "complete", "fr": "complet", "cat": "Adjectifs"}, {"en": "incomplete", "fr": "incomplet", "cat": "Adjectifs"}, {"en": "recent", "fr": "récent", "cat": "Adjectifs"}, {"en": "current", "fr": "actuel", "cat": "Adjectifs"}, {"en": "additional", "fr": "supplémentaire", "cat": "Adjectifs"}, {"en": "various", "fr": "divers", "cat": "Adjectifs"}, {"en": "several", "fr": "plusieurs", "cat": "Adjectifs"}, {"en": "entire", "fr": "entier", "cat": "Adjectifs"}, {"en": "local", "fr": "local", "cat": "Adjectifs"}, {"en": "international", "fr": "international", "cat": "Adjectifs"}, {"en": "urgent", "fr": "urgent", "cat": "Adjectifs"}, {"en": "regular", "fr": "régulier", "cat": "Adjectifs"}, {"en": "flexible", "fr": "flexible", "cat": "Adjectifs"}, {"en": "spacious", "fr": "spacieux", "cat": "Adjectifs"}, {"en": "crowded", "fr": "bondé", "cat": "Adjectifs"}, {"en": "broken", "fr": "cassé", "cat": "Adjectifs"}, {"en": "satisfied", "fr": "satisfait", "cat": "Adjectifs"}, {"en": "disappointed", "fr": "déçu", "cat": "Adjectifs"}, {"en": "quickly", "fr": "rapidement", "cat": "Adverbes"}, {"en": "slowly", "fr": "lentement", "cat": "Adverbes"}, {"en": "carefully", "fr": "soigneusement", "cat": "Adverbes"}, {"en": "clearly", "fr": "clairement", "cat": "Adverbes"}, {"en": "usually", "fr": "habituellement", "cat": "Adverbes"}, {"en": "often", "fr": "souvent", "cat": "Adverbes"}, {"en": "rarely", "fr": "rarement", "cat": "Adverbes"}, {"en": "always", "fr": "toujours", "cat": "Adverbes"}, {"en": "never", "fr": "jamais", "cat": "Adverbes"}, {"en": "already", "fr": "déjà", "cat": "Adverbes"}, {"en": "still", "fr": "encore", "cat": "Adverbes"}, {"en": "yet", "fr": "encore / déjà selon contexte", "cat": "Adverbes"}, {"en": "probably", "fr": "probablement", "cat": "Adverbes"}, {"en": "certainly", "fr": "certainement", "cat": "Adverbes"}, {"en": "especially", "fr": "particulièrement", "cat": "Adverbes"}, {"en": "particularly", "fr": "particulièrement", "cat": "Adverbes"}, {"en": "mainly", "fr": "principalement", "cat": "Adverbes"}, {"en": "mostly", "fr": "surtout", "cat": "Adverbes"}, {"en": "nearly", "fr": "presque", "cat": "Adverbes"}, {"en": "approximately", "fr": "approximativement", "cat": "Adverbes"}, {"en": "exactly", "fr": "exactement", "cat": "Adverbes"}, {"en": "completely", "fr": "complètement", "cat": "Adverbes"}, {"en": "partly", "fr": "partiellement", "cat": "Adverbes"}, {"en": "highly", "fr": "fortement / très", "cat": "Adverbes"}, {"en": "directly", "fr": "directement", "cat": "Adverbes"}, {"en": "properly", "fr": "correctement", "cat": "Adverbes"}, {"en": "regularly", "fr": "régulièrement", "cat": "Adverbes"}, {"en": "be in charge of", "fr": "être chargé de", "cat": "Expressions"}, {"en": "be likely to", "fr": "être susceptible de", "cat": "Expressions"}, {"en": "be expected to", "fr": "être censé / prévu de", "cat": "Expressions"}, {"en": "be supposed to", "fr": "être censé", "cat": "Expressions"}, {"en": "be allowed to", "fr": "être autorisé à", "cat": "Expressions"}, {"en": "be required to", "fr": "être tenu de", "cat": "Expressions"}, {"en": "be able to", "fr": "être capable de", "cat": "Expressions"}, {"en": "look forward to", "fr": "avoir hâte de", "cat": "Expressions"}, {"en": "take place", "fr": "avoir lieu", "cat": "Expressions"}, {"en": "set up a meeting", "fr": "organiser une réunion", "cat": "Expressions"}, {"en": "make an appointment", "fr": "prendre rendez-vous", "cat": "Expressions"}, {"en": "meet a deadline", "fr": "respecter une date limite", "cat": "Expressions"}, {"en": "miss a deadline", "fr": "rater une date limite", "cat": "Expressions"}, {"en": "place an order", "fr": "passer une commande", "cat": "Expressions"}, {"en": "fill out a form", "fr": "remplir un formulaire", "cat": "Expressions"}, {"en": "carry out a task", "fr": "réaliser une tâche", "cat": "Expressions"}, {"en": "deal with a problem", "fr": "gérer un problème", "cat": "Expressions"}, {"en": "take care of", "fr": "s’occuper de", "cat": "Expressions"}, {"en": "get in touch with", "fr": "prendre contact avec", "cat": "Expressions"}, {"en": "keep in mind", "fr": "garder à l’esprit", "cat": "Expressions"}, {"en": "in order to", "fr": "afin de", "cat": "Expressions"}, {"en": "as well as", "fr": "ainsi que", "cat": "Expressions"}, {"en": "ahead of schedule", "fr": "en avance sur le planning", "cat": "Expressions"}, {"en": "behind schedule", "fr": "en retard sur le planning", "cat": "Expressions"}, {"en": "on behalf of", "fr": "au nom de", "cat": "Expressions"}, {"en": "from now on", "fr": "à partir de maintenant", "cat": "Expressions"}, {"en": "by the end of", "fr": "d’ici la fin de", "cat": "Expressions"}, {"en": "no later than", "fr": "au plus tard", "cat": "Expressions"}, {"en": "at least", "fr": "au moins", "cat": "Expressions"}, {"en": "at most", "fr": "au maximum", "cat": "Expressions"}, {"en": "regardless of", "fr": "peu importe / indépendamment de", "cat": "Expressions"}];
+
+    const state = {
+      mode: localStorage.getItem("toeic_mobile_mode") || "qcm",
+      current: null,
+      currentDirection: "en-fr",
+      locked: false,
+      autoAudio: localStorage.getItem("toeic_mobile_auto_audio") === "true",
+      good: Number(localStorage.getItem("toeic_mobile_good") || 0),
+      bad: Number(localStorage.getItem("toeic_mobile_bad") || 0),
+      streak: Number(localStorage.getItem("toeic_mobile_streak") || 0),
+      mistakes: JSON.parse(localStorage.getItem("toeic_mobile_mistakes") || "[]")
+    };
+
+    const el = {
+      wordCount: document.getElementById("wordCount"),
+      modeQcm: document.getElementById("modeQcm"),
+      modeWrite: document.getElementById("modeWrite"),
+      direction: document.getElementById("direction"),
+      category: document.getElementById("category"),
+      focus: document.getElementById("focus"),
+      speakBtn: document.getElementById("speakBtn"),
+      autoAudioBtn: document.getElementById("autoAudioBtn"),
+      good: document.getElementById("good"),
+      bad: document.getElementById("bad"),
+      streak: document.getElementById("streak"),
+      rate: document.getElementById("rate"),
+      catPill: document.getElementById("catPill"),
+      dirPill: document.getElementById("dirPill"),
+      questionWord: document.getElementById("questionWord"),
+      qcmZone: document.getElementById("qcmZone"),
+      qcmActions: document.getElementById("qcmActions"),
+      writeZone: document.getElementById("writeZone"),
+      answerInput: document.getElementById("answerInput"),
+      checkBtn: document.getElementById("checkBtn"),
+      skipWriteBtn: document.getElementById("skipWriteBtn"),
+      skipQcmBtn: document.getElementById("skipQcmBtn"),
+      nextQcmBtn: document.getElementById("nextQcmBtn"),
+      feedback: document.getElementById("feedback"),
+      reviewList: document.getElementById("reviewList"),
+      clearMistakesBtn: document.getElementById("clearMistakesBtn"),
+      bottomAnswer: document.getElementById("bottomAnswer"),
+      bottomNext: document.getElementById("bottomNext"),
+      resetBtn: document.getElementById("resetBtn"),
+      toast: document.getElementById("toast"),
+    };
+
+    function save() {
+      localStorage.setItem("toeic_mobile_mode", state.mode);
+      localStorage.setItem("toeic_mobile_auto_audio", String(state.autoAudio));
+      localStorage.setItem("toeic_mobile_good", String(state.good));
+      localStorage.setItem("toeic_mobile_bad", String(state.bad));
+      localStorage.setItem("toeic_mobile_streak", String(state.streak));
+      localStorage.setItem("toeic_mobile_mistakes", JSON.stringify(state.mistakes));
+    }
+
+    function normalize(str) {
+      return String(str || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[’']/g, "'")
+        .replace(/\bto\s+/g, "")
+        .replace(/[^a-z0-9\s'-]/gi, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function splitAnswers(text) {
+      return String(text)
+        .split("/")
+        .flatMap(x => x.split(","))
+        .map(x => normalize(x))
+        .filter(Boolean);
+    }
+
+    function isCorrect(user, expected) {
+      const u = normalize(user);
+      if (!u) return false;
+      const answers = splitAnswers(expected);
+      if (answers.includes(u)) return true;
+      return answers.some(ans => ans.length >= 5 && (u.includes(ans) || ans.includes(u)));
+    }
+
+
+    function englishText() {
+      return state.current ? state.current.en : "";
+    }
+
+    function cleanSpeechText(text) {
+      return String(text || "")
+        .replace(/^to\s+/i, "")
+        .replace(/\s*\/\s*/g, ", ")
+        .trim();
+    }
+
+    function speakEnglish() {
+      const text = cleanSpeechText(englishText());
+      if (!text) return;
+
+      if (!("speechSynthesis" in window)) {
+        toast("Audio non disponible sur ce navigateur.");
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "en-US";
+      utterance.rate = 0.86;
+      utterance.pitch = 1;
+      utterance.volume = 1;
+
+      const voices = window.speechSynthesis.getVoices();
+      const englishVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith("en"));
+      if (englishVoice) utterance.voice = englishVoice;
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function updateAudioButton() {
+      el.autoAudioBtn.textContent = state.autoAudio ? "Auto audio : ON" : "Auto audio : OFF";
+      el.autoAudioBtn.classList.toggle("on", state.autoAudio);
+    }
+
+    function sample(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    function shuffle(array) {
+      const a = [...array];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function getPool() {
+      const cat = el.category.value;
+      let pool = VOCAB.filter(v => cat === "all" || v.cat === cat);
+
+      if (el.focus.value === "mistakes") {
+        const keys = new Set(state.mistakes.map(m => m.en + "|" + m.fr));
+        pool = pool.filter(v => keys.has(v.en + "|" + v.fr));
+        if (!pool.length) {
+          toast("Tu n’as pas encore d’erreurs enregistrées.");
+          pool = VOCAB.filter(v => cat === "all" || v.cat === cat);
+        }
+      }
+      return pool.length ? pool : VOCAB;
+    }
+
+    function chooseDirection() {
+      const d = el.direction.value;
+      if (d === "random") return Math.random() < 0.5 ? "en-fr" : "fr-en";
+      return d;
+    }
+
+    function expectedAnswer() {
+      return state.currentDirection === "en-fr" ? state.current.fr : state.current.en;
+    }
+
+    function promptAnswer() {
+      return state.currentDirection === "en-fr" ? state.current.en : state.current.fr;
+    }
+
+    function newQuestion() {
+      clearFeedback();
+      state.locked = false;
+      state.current = sample(getPool());
+      state.currentDirection = chooseDirection();
+
+      el.questionWord.textContent = promptAnswer();
+      el.catPill.textContent = state.current.cat;
+      el.dirPill.textContent = state.currentDirection === "en-fr" ? "EN → FR" : "FR → EN";
+      el.answerInput.value = "";
+
+      if (state.mode === "qcm") buildQcm();
+      else setTimeout(() => el.answerInput.focus(), 70);
+
+      updateStats();
+      updateAudioButton();
+      if (state.autoAudio) setTimeout(speakEnglish, 250);
+    }
+
+    function buildQcm() {
+      const target = expectedAnswer();
+      const choices = [target];
+      const candidates = shuffle(getPool())
+        .map(v => state.currentDirection === "en-fr" ? v.fr : v.en)
+        .filter(x => normalize(x) !== normalize(target));
+
+      for (const c of candidates) {
+        if (choices.length >= 4) break;
+        if (!choices.some(existing => normalize(existing) === normalize(c))) choices.push(c);
+      }
+
+      el.qcmZone.innerHTML = "";
+      shuffle(choices).forEach(choice => {
+        const btn = document.createElement("button");
+        btn.className = "choice";
+        btn.textContent = choice;
+        btn.addEventListener("click", () => answerQcm(btn, choice));
+        el.qcmZone.appendChild(btn);
+      });
+    }
+
+    function addMistake() {
+      const item = state.current;
+      if (!item) return;
+      const exists = state.mistakes.some(m => m.en === item.en && m.fr === item.fr);
+      if (!exists) {
+        state.mistakes.unshift({ en: item.en, fr: item.fr, cat: item.cat });
+        state.mistakes = state.mistakes.slice(0, 120);
+      }
+    }
+
+    function removeMistake() {
+      const item = state.current;
+      if (!item) return;
+      state.mistakes = state.mistakes.filter(m => !(m.en === item.en && m.fr === item.fr));
+    }
+
+    function answerQcm(btn, choice) {
+      if (state.locked) return;
+      state.locked = true;
+      const ok = normalize(choice) === normalize(expectedAnswer());
+      [...el.qcmZone.children].forEach(b => {
+        if (normalize(b.textContent) === normalize(expectedAnswer())) b.classList.add("correct");
+      });
+
+      if (ok) {
+        state.good++;
+        state.streak++;
+        removeMistake();
+        showFeedback("good", "Correct.");
+        vibrate(18);
+        save();
+        updateStats();
+        setTimeout(newQuestion, 650);
+      } else {
+        btn.classList.add("wrong");
+        state.bad++;
+        state.streak = 0;
+        addMistake();
+        showFeedback("bad", "Réponse : " + expectedAnswer());
+        vibrate([30, 40, 30]);
+        save();
+        updateStats();
+      }
+    }
+
+    function answerWritten() {
+      if (state.locked) return;
+      const ok = isCorrect(el.answerInput.value, expectedAnswer());
+      state.locked = true;
+
+      if (ok) {
+        state.good++;
+        state.streak++;
+        removeMistake();
+        showFeedback("good", "Correct. Réponse : " + expectedAnswer());
+        vibrate(18);
+        save();
+        updateStats();
+        setTimeout(newQuestion, 750);
+      } else {
+        state.bad++;
+        state.streak = 0;
+        addMistake();
+        showFeedback("bad", "Réponse : " + expectedAnswer());
+        vibrate([30, 40, 30]);
+        save();
+        updateStats();
+      }
+    }
+
+    function skipQuestion() {
+      if (!state.current) return;
+      if (!state.locked) {
+        state.bad++;
+        state.streak = 0;
+        addMistake();
+      }
+      state.locked = true;
+      showFeedback("info", promptAnswer() + " = " + expectedAnswer());
+      save();
+      updateStats();
+    }
+
+    function showFeedback(type, message) {
+      el.feedback.className = "feedback show " + type;
+      el.feedback.textContent = message;
+    }
+
+    function clearFeedback() {
+      el.feedback.className = "feedback";
+      el.feedback.textContent = "";
+    }
+
+    function updateStats() {
+      el.good.textContent = state.good;
+      el.bad.textContent = state.bad;
+      el.streak.textContent = state.streak;
+      const total = state.good + state.bad;
+      const rate = total ? Math.round((state.good / total) * 100) : 0;
+      el.rate.textContent = rate + "%";
+      renderReview();
+    }
+
+    function renderReview() {
+      el.reviewList.innerHTML = "";
+      if (!state.mistakes.length) {
+        const chip = document.createElement("span");
+        chip.className = "review-chip";
+        chip.textContent = "Aucun mot à revoir";
+        el.reviewList.appendChild(chip);
+        return;
+      }
+      state.mistakes.slice(0, 60).forEach(m => {
+        const chip = document.createElement("span");
+        chip.className = "review-chip";
+        chip.textContent = m.en + " = " + m.fr;
+        el.reviewList.appendChild(chip);
+      });
+    }
+
+    function setMode(mode) {
+      state.mode = mode;
+      el.modeQcm.classList.toggle("active", mode === "qcm");
+      el.modeWrite.classList.toggle("active", mode === "write");
+      el.qcmZone.classList.toggle("hidden", mode !== "qcm");
+      el.qcmActions.classList.toggle("hidden", mode !== "qcm");
+      el.writeZone.classList.toggle("hidden", mode !== "write");
+      save();
+      newQuestion();
+    }
+
+    function initCategories() {
+      const cats = [...new Set(VOCAB.map(v => v.cat))].sort();
+      cats.forEach(cat => {
+        const opt = document.createElement("option");
+        opt.value = cat;
+        opt.textContent = cat;
+        el.category.appendChild(opt);
+      });
+    }
+
+    function toast(msg) {
+      el.toast.textContent = msg;
+      el.toast.classList.add("show");
+      setTimeout(() => el.toast.classList.remove("show"), 1700);
+    }
+
+    function vibrate(pattern) {
+      if (navigator.vibrate) navigator.vibrate(pattern);
+    }
+
+    el.modeQcm.addEventListener("click", () => setMode("qcm"));
+    el.modeWrite.addEventListener("click", () => setMode("write"));
+    el.direction.addEventListener("change", newQuestion);
+    el.category.addEventListener("change", newQuestion);
+    el.focus.addEventListener("change", newQuestion);
+    el.speakBtn.addEventListener("click", speakEnglish);
+    el.autoAudioBtn.addEventListener("click", () => {
+      state.autoAudio = !state.autoAudio;
+      save();
+      updateAudioButton();
+      toast(state.autoAudio ? "Auto audio activé." : "Auto audio désactivé.");
+      if (state.autoAudio) speakEnglish();
+    });
+
+    el.skipQcmBtn.addEventListener("click", skipQuestion);
+    el.nextQcmBtn.addEventListener("click", newQuestion);
+    el.skipWriteBtn.addEventListener("click", skipQuestion);
+    el.checkBtn.addEventListener("click", answerWritten);
+
+    el.bottomAnswer.addEventListener("click", () => {
+      if (state.mode === "write" && !state.locked && el.answerInput.value.trim()) answerWritten();
+      else skipQuestion();
+    });
+    el.bottomNext.addEventListener("click", newQuestion);
+
+    el.answerInput.addEventListener("keydown", e => {
+      if (e.key === "Enter") answerWritten();
+    });
+
+    el.resetBtn.addEventListener("click", () => {
+      if (!confirm("Réinitialiser le score ?")) return;
+      state.good = 0;
+      state.bad = 0;
+      state.streak = 0;
+      save();
+      updateStats();
+      toast("Score réinitialisé.");
+    });
+
+    el.clearMistakesBtn.addEventListener("click", () => {
+      if (!confirm("Vider les mots à revoir ?")) return;
+      state.mistakes = [];
+      save();
+      updateStats();
+      toast("Liste vidée.");
+    });
+
+    el.wordCount.textContent = VOCAB.length;
+    updateAudioButton();
+    initCategories();
+    setMode(state.mode);
+  </script>
+</body>
+</html>
